@@ -15,3 +15,4 @@
 /*
 * Connect to MongoDB, Connect to Rabbit, Pull rules, begin processing queues
 */
+require('./MongoDB_Core');
