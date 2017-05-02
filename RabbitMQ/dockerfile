@@ -1,4 +1,2 @@
 FROM rabbitmq:latest
 MATINTAINER John Kossa "kg959ster@gmailcom"
-
-
