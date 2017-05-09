@@ -3,9 +3,20 @@ Home automation using RabbitMQ, MongoDB, and Node.js
 
 The system consists of a central server and many peripherals. Each perepheral registers to the server when it comes online and publishes its available API. It periodically publishes events to the server according to its function. The server can invoke API commands with calls on that channel.
 
+The server consists of multiple components including:
+
+a mongodb table that keeps track of the current state of the system
+
+a mongodb table that keeps a log of events sent by peripherals for reporting purposes
+
+a set of basic services that provide events like a basic timer, weather service, etc.
+
+a scripting layer that allows users to design triggers for when certain API calls will be made
+
 ## Rabbit Channels
 ### periphreal_register
 Used by periphreals to register with the server.
+
 Messages of the form:
 
 {
@@ -20,6 +31,7 @@ Messages of the form:
 
 ### peripheral_event
 Used by peripherals to send events and data back to the server.
+
 Messages of the form:
 
 {
@@ -27,6 +39,20 @@ Messages of the form:
     "type": `"type of event that happened"`,
     "message": `"a human readable message of what is being reported"`,
     "data": `a dictionary or primative of the data being sent to the server`
+  }
+}
+
+## MongoDB Tables
+### status
+Stores the current state of the system.
+
+Messages of the form:
+
+{
+  `"fact_name"`:{
+      "value": `value`,
+      "reported": `time the fact was added`,
+      "stale_time?": `time the fact should be considered unreliable`
   }
 }
 
