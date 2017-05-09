@@ -19,28 +19,45 @@ Used by periphreals to register with the server.
 
 Messages of the form:
 
+```javascript
 {
-  `"device_name"`:{
-    `"api_command_1"`:{
+  "<device_name>":{
+    "<api_command_1>":{
       "parameters":{
-        `parameters` 
+        <parameters> 
       } 
     }
   }
 }
+```
 
 ### peripheral_event
 Used by peripherals to send events and data back to the server.
 
 Messages of the form:
 
+```javascript
 {
-  `"device_name"`:{
-    "type": `"type of event that happened"`,
-    "message": `"a human readable message of what is being reported"`,
-    "data": `a dictionary or primative of the data being sent to the server`
+  "<device_name>":{
+    "type": "<type of event that happened>",
+    "message": "<a human readable message of what is being reported>",
+    "data": <a dictionary or primative of the data being sent to the server>
   }
 }
+```
+
+
+## Peripheral Channels
+Peripherals each subscribe to a channel that matches their name. Each subscribes to the channel and receves messages to trigger their API calls.
+
+```javascript
+{
+  "<api call>":{
+    "<parameter_1_name>": <parameter_1>,
+    "<parameter_2_name>": <parameter_2>
+  }
+}
+```
 
 ## MongoDB Tables
 ### status
@@ -48,20 +65,12 @@ Stores the current state of the system.
 
 Messages of the form:
 
+```javascript
 {
-  `"fact_name"`:{
-      "value": `value`,
-      "reported": `time the fact was added`,
-      "stale_time?": `time the fact should be considered unreliable`
+  "<fact_name>":{
+      "value": <value>,
+      "reported": <time the fact was added>,
+      "stale_time?": <time the fact should be considered unreliable>
   }
 }
-
-## Peripheral Channels
-Peripherals each subscribe to a channel that matches their name. Each subscribes to the channel and receves messages to trigger their API calls.
-
-{
-  `"api call"`:{
-    `"parameter_1"`: `parameter_1`,
-    `"parameter_2"`: `parameter_2`
-  }
-}
+```
