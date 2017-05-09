@@ -13,8 +13,9 @@ a set of basic services that provide events like a basic timer, weather service,
 
 a scripting layer that allows users to design triggers for when certain API calls will be made
 
-## Rabbit Channels
-### periphreal_register
+## Channel List
+### Server
+#### periphreal_register
 Used by periphreals to register with the server.
 
 Messages of the form:
@@ -31,7 +32,7 @@ Messages of the form:
 }
 ```
 
-### peripheral_event
+#### peripheral_event
 Used by peripherals to send events and data back to the server.
 
 Messages of the form:
@@ -47,7 +48,7 @@ Messages of the form:
 ```
 
 
-## Peripheral Channels
+### Peripheral Channels
 Peripherals each subscribe to a channel that matches their name. Each subscribes to the channel and receves messages to trigger their API calls.
 
 ```javascript
