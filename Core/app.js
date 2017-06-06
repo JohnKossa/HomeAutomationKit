@@ -15,4 +15,19 @@
 /*
 * Connect to MongoDB, Connect to Rabbit, Pull rules, begin processing queues
 */
-require('./MongoDB_Core');
+var db = require('./MongoDB_Core');
+
+var amqp = require('amqplib/callback_api');
+amqp.connect('amqp://localhost', function(err, conn) {
+	conn.createChannel(function(err, ch) {});
+	var q = 'hello';
+
+	ch.assertQueue(q, {durable: false});
+	// Note: on Node 6 Buffer.from(msg) should be used
+	ch.sendToQueue(q, new Buffer('Hello World!'));
+	ch.consume(q, function(msg) {
+		console.log(" [x] Received %s", msg.content.toString());
+	}, {noAck: true});
+	console.log(" [x] Sent 'Hello World!'");
+	setTimeout(function() { conn.close(); process.exit(0) }, 500);
+});
