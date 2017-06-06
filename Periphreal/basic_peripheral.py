@@ -31,17 +31,27 @@ class BasicPeripheral:
     }
 
     def __init__(self):
+        self.commands = {}
         self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
         self.channel = self.connection.channel()
         self.name = type+random.randint(1, 10000)
 
     def register_to_core(self):
+        """Publish a registration to the core, listing the API commands."""
         self.channel.basic_publish(exchange='', routing_key='peripheral_register', body=json.dumps({self.name: api}))
 
     def subscribe_to_commands(self):
-        # TODO Figure out how to distribute queue names
-        pass
+        """Subscribe to the queue matching the instance's name. Pass the command to the process_command function."""
+        self.basic_consume(self.process_command, queue=self.name)
+
+    def process_command(self, ch, method, properties, body):
+        """Call the command(s) that correspond to the message"""
+        body_json = json.parse(body)
+        for key in body_json:
+            if self.commands.get(key) is not None:
+                self.commands[key](body_json[key])
 
     def publish_event(self, event):
+        """Publishes a created event object to the core."""
         self.channel.basic_publish(exchange='', routing_key='peripheral_event', body=json.dumps({self.name: dict(event)}))
 
